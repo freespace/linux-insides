@@ -332,6 +332,13 @@ It means that segment registers will have following values after kernel setup st
 ```
 fs = es = ds = ss = 0x1000
 cs = 0x1020
+
+# fs, es, ds, and ss are segment registers. More specifically:
+# - cs is the code segment register, which is the segment instructions reside in
+# - ds is the data segment register, which is the segment data resides in
+# - fs, es, gs are general purpose segment registers
+# - ss is the stack segment register, which is the segment data resides in, and may sometimes be the same
+#   as the ds register.
 ```
 
 for my case when kernel loaded at `0x10000`.
