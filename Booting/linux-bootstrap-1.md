@@ -379,7 +379,11 @@ _start:
 	lretw
 ```
 
-push `ds` value to stack, and address of [6](https://github.com/torvalds/linux/blob/master/arch/x86/boot/header.S#L494) label and execute `lretw` instruction. When we call `lretw`, it loads address of  label `6` to [instruction pointer](https://en.wikipedia.org/wiki/Program_counter) register and `cs` with value of `ds`. After it we will have `ds` and `cs` with the same values.
+push `ds` value to stack, and address of [6](https://github.com/torvalds/linux/blob/master/arch/x86/boot/header.S#L494) label and execute `lretw` instruction. `lretw` is actually `ret` with `l` prefix to say that it is a long jump, so instead of simply popping the return address and loading it into the instruction pointer, it will also pop the code segment that the return address resides in. `w` is a prefix to indicate values are 16 bit as we are in real mode.
+
+Therefore, when we call `lretw`, it pops the address of  label `6` into [instruction pointer](https://en.wikipedia.org/wiki/Program_counter) register and then pops the valud of `ds` into  `cs`. The end result is that instruction continues after the label `6`, but with `cs` and `ds` containing the same value.
+
+
 
 Stack Setup
 --------------------------------------------------------------------------------
