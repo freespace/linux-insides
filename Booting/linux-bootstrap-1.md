@@ -113,9 +113,15 @@ boot:
     mov bl, 0x07
 
     int 0x10
-    jmp $
+    jmp $ ; $ in NASM resolves to the start of the line containing it, so this line here jumps back to the 
+          ; start of itself, i.e. an infinite loop
 
-times 510-($-$$) db 0
+times 510-($-$$) db 0 ; $$ in NASM resolves to the start of the section, so $-$$ calculates the number
+                      ; of bytes up to the start of the current line. The purpose of this line is to
+                      ; fill the rest of the section, minus the final 2 bytes and the instructions bytes
+                      ; thus far, with 0s. Since the boot sector is 512 bytes long, and the last 2 bytes
+                      ; are explicitly set, the rest of the section is 510 bytes, minus the instruction
+                      ; bytes for printing !
 
 db 0x55
 db 0xaa
